@@ -1,21 +1,28 @@
-import React, { useState, useContext } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-import {Routes, Route,Link, } from 'react-router-dom';
-import MainPage from './pages/MainPage';
-import LoginPage from './pages/LoginPage';
-import NotFoundPage from './pages/NotFoundPage';
-import LogoutPage from './pages/LogoutPage';
-import Context from './context/context.js';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Routes, Route, Link } from 'react-router-dom';
+import { setUserName } from './store/dataSlice';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import MainPage from './components/MainPage';
+import LoginPage from './components/LoginPage';
+import NotFoundPage from './components/NotFoundPage';
+import LogoutPage from './components/LogoutPage';
+import Context from './context/context';
 
 function App() {
+  const dispatch = useDispatch();
+  const userNameFromState = useSelector((state) => state.data.userName);
 
   const user = JSON.parse(localStorage.getItem('user'));
+
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
-  
-  console.log('IsAuth: ', isAuthenticated)
+
+  if (isAuthenticated && userNameFromState === null) { dispatch(setUserName(user.username)); }
 
   return (
-<Context.Provider value={{isAuthenticated, setIsAuthenticated}}>
+
+    <Context.Provider value={{ isAuthenticated, setIsAuthenticated }}>
 
       <div>
         <ul>
@@ -31,7 +38,7 @@ function App() {
         </ul>
         <hr />
         <Routes>
-          <Route exact path="/" element={ isAuthenticated ? <MainPage /> : <LoginPage/>} />
+          <Route exact path="/" element={isAuthenticated ? <MainPage /> : <LoginPage />} />
           <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/logout" element={<LogoutPage />} />
           <Route path="*" element={<NotFoundPage />} />

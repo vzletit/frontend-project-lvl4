@@ -1,50 +1,46 @@
-/* eslint-disable react/jsx-filename-extension */
-// import { Navigate } from 'react-router-dom';
 import React, {
-  useEffect, useRef, useState, useContext
+  useEffect, useRef, useState, useContext,
 } from 'react';
-import {useNavigate} from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form as LoginForm } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import { setUserName } from '../store/dataSlice';
 import AuthService from '../services/AuthService';
 import Context from '../context/context';
 
-
 export default function LoginPage() {
-  
-  const {isAuthenticated, setIsAuthenticated} = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated } = useContext(Context); // eslint-disable-line 
   const inputRef = useRef();
   const passRef = useRef();
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
   useEffect(() => inputRef.current.focus(), []);
-   
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
 
   const [isAuthFailed, setAuthFailed] = useState(false);
-   const [isLoggingIn, setLoggingIn] = useState(false);
+  const [isLoggingIn, setLoggingIn] = useState(false);
 
   const validate = Yup.object().shape({
     username: Yup.string().min(3, 'Too short').max(20, 'Too long').required(),
     password: Yup.string().min(3, 'Too short').max(20, 'Too long').required(),
   });
 
-const handleLogin = async ({ username, password }) => {
-  try {
-  await AuthService.Login(username, password);
-  const user = JSON.parse(localStorage.getItem('user'));
-  setAuthFailed(false); 
-  setIsAuthenticated(true);
-  navigate('/');
-}
-catch (e) {
-    console.log('%cLoginPage.jsx line:43 isAuthFailed', 'color: #007acc;', isAuthFailed);
-    setAuthFailed(true);
-  }
+  const handleLogin = async ({ username, password }) => {
+    try {
+      setLoggingIn(true);
+      await AuthService.Login(username, password);
+      setIsAuthenticated(true);
+      dispatch(setUserName(username));
+      setAuthFailed(false);
+      setLoggingIn(false);
 
-}
+      navigate('/');
+    } catch (err) {
+      console.log('Login failed pochemu-to: ', err);
+      setAuthFailed(true);
+    }
+  };
 
   return (
 
@@ -52,7 +48,7 @@ catch (e) {
       initialValues={{ username: '', password: '' }}
       validationSchema={validate}
       onSubmit={handleLogin}
-        
+
     >
       {(formik) => (
         <>
