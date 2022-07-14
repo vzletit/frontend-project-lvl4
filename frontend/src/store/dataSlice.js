@@ -6,10 +6,7 @@ const initialState = {
   channels: [],
   messages: [],
   currentChannelId: null,
-  status: null,
-  error: null,
-  blockedInput: null,
-  userName: null,
+  fetchingData: false,
 };
 
 export const fetchData = createAsyncThunk(
@@ -25,33 +22,49 @@ const dataSlice = createSlice({
   initialState,
   reducers: {
     setActiveChannel: (state, action) => { state.currentChannelId = action.payload; },
-    addMessage: (state, action) => { state.messages.push(action.payload); state.status = 'Ready'; },
-    setAppStatus: (state, action) => { state.status = action.payload; },
-    setBlockedInput: (state, action) => { state.blockedInput = action.payload; },
-    setUserName: (state, action) => { state.userName = action.payload; },
+
+    addChannel: (state, action) => { state.channels.push(action.payload); },
+
+    renameChannel: (state, action) => {
+      const selectedChannel = state.channels.find((channel) => channel.id === action.payload.id);
+      selectedChannel.name = action.payload.name;
+    },
+
+    removeChannel: (state, action) => {
+      const filteredChannels = state.channels
+        .filter((channel) => channel.id !== action.payload);
+
+      const filteredMessages = state.messages
+        .filter((message) => message.channelId !== action.payload);
+
+      state.channels = filteredChannels;
+      state.messages = filteredMessages;
+    },
+
+    addMessage: (state, action) => { state.messages.push(action.payload); },
   },
 
   extraReducers: {
     [fetchData.pending]: (state) => {
-      state.status = 'loading';
-      state.error = null;
+      state.fetchingData = true;
     },
 
     [fetchData.fulfilled]: (state, action) => {
-      state.status = 'Ready';
-      state.error = null;
       state.channels = action.payload.channels;
       state.messages = action.payload.messages;
       state.currentChannelId = action.payload.currentChannelId;
+      state.fetchingData = false;
     },
 
     [fetchData.rejected]: (state) => {
       state.error = 'failed to get data from server';
+      state.status = 'Error';
+      state.fetchingData = false;
     },
   },
 });
 
 export const {
-  setActiveChannel, addMessage, setAppStatus, setBlockedInput, setUserName,
+  setActiveChannel, addMessage, addChannel, removeChannel, renameChannel,
 } = dataSlice.actions;
 export default dataSlice.reducer;

@@ -1,80 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import DirectionsIcon from '@mui/icons-material/Directions';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import socket from '../http/socket';
-import { addMessage, setAppStatus, setBlockedInput } from '../store/dataSlice';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import socketAPI from '../http/socket';
+import {
+  setStatusCONNECTING,
+} from '../store/generalSlice';
 
 export default function InputArea() {
-  const [newMessageText, setNewMessageText] = useState('');
+  const isInputBlocked = useSelector((state) => state.general.blockedInput);
+  const appStatus = useSelector((state) => state.general.status);
+  const userName = useSelector((state) => state.general.userName);
+  const currentChannelId = useSelector((state) => state.data.currentChannelId);
+  const messages = useSelector((state) => state.data.messages);
+  const channels = useSelector((state) => state.data.channels);
+  const inputRef = useRef();
 
-  const isInputBlocked = useSelector((state) => state.data.blockedInput);
-  const appStatus = useSelector((state) => state.data.status);
-  const userName = useSelector((state) => state.data.userName);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [messages, channels]);
 
   const dispatch = useDispatch();
 
-  const currentChannelId = useSelector((state) => state.data.currentChannelId);
+  const validate = Yup.object().shape({
+    message: Yup.string().required(),
+  });
 
-  useEffect(() => {
-    socket.on('newMessage', (message) => {
-      dispatch(addMessage(message));
-      dispatch(setAppStatus('Ready'));
-      dispatch(setBlockedInput(false));
-    });
-  }, []);
+  const handleSendMessage = ({ message }, { resetForm }) => {
+    dispatch(setStatusCONNECTING());
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (newMessageText === '') { return; }
+    const newMessage = {
+      channelId: currentChannelId,
+      body: message,
+      username: userName,
+    };
 
-    dispatch(setBlockedInput(true));
-    dispatch(setAppStatus('Sending'));
-
-    socket.emit(
-      'newMessage',
-      {
-        channelId: currentChannelId,
-        body: newMessageText,
-        username: userName,
-      },
-      (acknowledge) => (acknowledge ? dispatch(setBlockedInput(false)) : null),
-    );
-    setNewMessageText('');
+    socketAPI.addMessage(newMessage);
+    resetForm();
   };
 
   return (
 
-    <>
-      <InputBase
-        onChange={(event) => { setNewMessageText(event.target.value); }}
-        sx={{ ml: 1, flex: 1 }}
-        autoFocus
-        disabled={isInputBlocked}
-        required
-        onKeyPress={(e) => {
-          if (e.key === 'Enter') { handleSendMessage(e); }
-        }}
-        value={newMessageText}
-        placeholder={appStatus === 'Sending' ? 'Sending...' : `${userName}:`}
-        inputProps={{ 'aria-label': 'Enter message here' }}
-      />
+    <Formik
+      initialValues={{ message: '' }}
+      validationSchema={validate}
+      onSubmit={handleSendMessage}
+    >
 
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <IconButton
-        color="primary"
-        disabled={isInputBlocked}
-        sx={{ p: '10px' }}
-        aria-label="directions"
-        type="submit"
-        onClick={handleSendMessage}
-      >
+      {(formik) => (
 
-        <DirectionsIcon />
-      </IconButton>
-    </>
+        <Form style={{ display: 'flex', flex: 1, width: '100%' }}>
+
+          <InputBase
+            onChange={formik.handleChange}
+            sx={{ ml: 1, flex: 1 }}
+            autoComplete="off"
+            inputRef={inputRef}
+            autoFocus
+            id="message"
+            disabled={isInputBlocked}
+            value={formik.values.message}
+            placeholder={appStatus === 'Transfering data' ? 'Sending...' : `${userName}:`}
+            inputProps={{ 'aria-label': 'Enter message here' }}
+          />
+
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <IconButton
+            color="primary"
+            disabled={isInputBlocked}
+            sx={{ p: '10px' }}
+            aria-label="Send message"
+            type="submit"
+          >
+            <DirectionsIcon />
+          </IconButton>
+        </Form>
+
+      )}
+
+    </Formik>
+
   );
 }

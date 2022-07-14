@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route, Link } from 'react-router-dom';
-import { setUserName } from './store/dataSlice';
+import { setUserName } from './store/generalSlice';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './components/MainPage';
 import LoginPage from './components/LoginPage';
@@ -12,7 +12,7 @@ import Context from './context/context';
 
 function App() {
   const dispatch = useDispatch();
-  const userNameFromState = useSelector((state) => state.data.userName);
+  const userNameFromState = useSelector((state) => state.general.userName);
 
   const user = JSON.parse(localStorage.getItem('user'));
 

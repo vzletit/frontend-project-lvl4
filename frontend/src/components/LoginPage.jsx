@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form as LoginForm } from 'formik';
 import { Form, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
-import { setUserName } from '../store/dataSlice';
+import { setUserName } from '../store/generalSlice';
 import AuthService from '../services/AuthService';
 import Context from '../context/context';
 

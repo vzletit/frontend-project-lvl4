@@ -8,16 +8,17 @@ import { useSelector } from 'react-redux';
 
 export default function Messages() {
   const messages = useSelector((state) => state.data.messages);
+
   const currentChannelId = useSelector((state) => state.data.currentChannelId);
 
   const messagesEndRef = useRef();
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  });
 
   return (
     <>
