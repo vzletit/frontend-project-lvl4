@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useContext, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
@@ -11,10 +12,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { APIContext } from '../context/context';
-import { setHideModal } from '../store/generalSlice';
+import { setHideModal, setStatusBUSY } from '../store/generalSlice';
 
 export default function ModalAddChannel({ visible }) {
+  const { t } = useTranslation();
   const socketAPI = useContext(APIContext);
+
   const channels = useSelector((state) => state.data.channels);
 
   const dispatch = useDispatch();
@@ -37,10 +40,10 @@ export default function ModalAddChannel({ visible }) {
   const validate = Yup.object().shape({
     channelName: Yup
       .string()
-      .required()
+      .required(t('ErrorRequired'))
       .test(
         'existsCheck',
-        'Channel already exists',
+        t('ErrorChannelExists'),
         (value = '') => !channelNamesLowerCaseArr.includes(value.toLowerCase()),
       ),
 
@@ -51,8 +54,10 @@ export default function ModalAddChannel({ visible }) {
   };
 
   const handleAddChannel = ({ channelName }, { resetForm }) => {
+    dispatch(setStatusBUSY());
     resetForm();
     socketAPI.newChannel({ name: channelName });
+
     dispatch(setHideModal());
   };
 
@@ -68,10 +73,10 @@ export default function ModalAddChannel({ visible }) {
         <Dialog open={visible} onClose={handleClose}>
           <Form onSubmit={formik.handleSubmit}>
 
-            <DialogTitle>Create channel</DialogTitle>
+            <DialogTitle>{t('addChannelTitle')}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Enter new channel name (should be unique).
+                {t('addChannelDescr')}
               </DialogContentText>
 
               <TextField
@@ -91,8 +96,8 @@ export default function ModalAddChannel({ visible }) {
 
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit">Create</Button>
+              <Button onClick={handleClose}>{t('cancel')}</Button>
+              <Button type="submit">{t('addChannelSubmit')}</Button>
             </DialogActions>
           </Form>
 

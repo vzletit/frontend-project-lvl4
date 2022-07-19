@@ -1,6 +1,7 @@
 import React, {
   useEffect, useRef, useState, useContext,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -14,6 +15,7 @@ import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/context';
 
 export default function RegistrationPage() {
+  const { t } = useTranslation();
   const { setIsAuthenticated } = useContext(AuthContext);
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -24,9 +26,9 @@ export default function RegistrationPage() {
   const [isRegistering, setisRegistering] = useState(false);
 
   const validate = Yup.object().shape({
-    username: Yup.string().min(3, 'Too short').max(20, 'Too long').required(),
-    password: Yup.string().min(6, 'Too short').max(20, 'Too long').required(),
-    passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    username: Yup.string().min(3, t('ErrorUsernameLength')).max(20, t('ErrorUsernameLength')).required(t('ErrorRequired')),
+    password: Yup.string().min(6, t('ErrorPasswordLength')).max(20, t('ErrorPasswordLength')).required(t('ErrorRequired')),
+    passwordConfirm: Yup.string().oneOf([Yup.ref('password'), null], t('ErrorPasswordsNotSame')),
   });
 
   const handleSignUp = async ({ username, password }) => {
@@ -68,12 +70,12 @@ export default function RegistrationPage() {
               display: 'flex', flexWrap: 'wrap', maxWidth: 600,
             }}
             >
-              <h1>Register</h1>
+              <h1>{t('signUpPageTitle')}</h1>
 
               <TextField
                 id="username"
                 inputRef={inputRef}
-                label="Username"
+                label={t('username')}
                 variant="outlined"
                 onChange={formik.handleChange}
                 type="text"
@@ -87,7 +89,7 @@ export default function RegistrationPage() {
               />
               <TextField
                 id="password"
-                label="Password"
+                label={t('password')}
                 variant="outlined"
                 onChange={formik.handleChange}
                 type="password"
@@ -101,7 +103,7 @@ export default function RegistrationPage() {
               />
               <TextField
                 id="passwordConfirm"
-                label="Confirm password"
+                label={t('passwordConfirm')}
                 variant="outlined"
                 onChange={formik.handleChange}
                 type="password"
@@ -113,7 +115,7 @@ export default function RegistrationPage() {
                 fullWidth
                 value={formik.values.passwordConfirm}
               />
-              {isAuthFailed ? <div className="invalid-feedback d-block">User Exists</div> : null}
+              {isAuthFailed ? <div className="invalid-feedback d-block">{t('ErrorUserExists')}</div> : null}
 
               <Button
                 disabled={isRegistering}
@@ -121,7 +123,7 @@ export default function RegistrationPage() {
                 type="submit"
                 variant="contained"
               >
-                {isRegistering ? 'Wait...' : 'SignUp'}
+                {isRegistering ? t('wait') : t('signUpPageSubmit')}
               </Button>
             </Box>
           </Form>

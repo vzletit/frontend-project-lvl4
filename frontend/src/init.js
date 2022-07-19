@@ -6,7 +6,10 @@ import { Provider } from 'react-redux';
 import io from 'socket.io-client';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
+import i18next from 'i18next';
+import { I18nextProvider } from 'react-i18next';
 import { APIContext } from './context/context';
+import ru from './lang/ru';
 import dataSlice, {
   addMessage,
   addChannel,
@@ -21,6 +24,14 @@ import generalSlice, {
 import App from './App';
 
 export default async function init() {
+  await i18next.init({
+    lng: 'ru',
+    debug: true,
+    resources: {
+      ru,
+    },
+  });
+
   const store = configureStore({
     reducer: {
       data: dataSlice,
@@ -64,11 +75,13 @@ export default async function init() {
 
   return (
     <Provider store={store}>
-      <APIContext.Provider value={socketAPI}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </APIContext.Provider>
+      <I18nextProvider i18n={i18next}>
+        <APIContext.Provider value={socketAPI}>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </APIContext.Provider>
+      </I18nextProvider>
     </Provider>
   );
 }

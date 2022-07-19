@@ -22,8 +22,8 @@ const generalSlice = createSlice({
       state.blockedInput = false;
     },
 
-    setStatusCONNECTING: (state) => {
-      state.status = 'Transfering data';
+    setStatusBUSY: (state) => {
+      state.status = 'Busy';
       state.messageText = '';
       state.error = '';
       state.blockedInput = true;
@@ -51,7 +51,7 @@ const generalSlice = createSlice({
 });
 
 export const {
-  setStatusOK, setStatusERROR, setStatusCONNECTING, setMessageText,
+  setStatusOK, setStatusERROR, setStatusBUSY, setMessageText,
 
   setBlockedInput,
   setUserName,

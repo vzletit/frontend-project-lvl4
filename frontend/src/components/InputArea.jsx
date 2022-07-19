@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import InputBase from '@mui/material/InputBase';
@@ -8,10 +9,11 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { APIContext } from '../context/context';
 import {
-  setStatusCONNECTING,
+  setStatusBUSY,
 } from '../store/generalSlice';
 
 export default function InputArea() {
+  const { t } = useTranslation();
   const socketAPI = useContext(APIContext);
   const isInputBlocked = useSelector((state) => state.general.blockedInput);
   const appStatus = useSelector((state) => state.general.status);
@@ -38,7 +40,7 @@ export default function InputArea() {
   });
 
   const handleSendMessage = ({ message }, { resetForm }) => {
-    dispatch(setStatusCONNECTING());
+    dispatch(setStatusBUSY());
 
     const newMessage = {
       channelId: currentChannelId,
@@ -71,7 +73,7 @@ export default function InputArea() {
             id="message"
             disabled={isInputBlocked}
             value={formik.values.message}
-            placeholder={appStatus === 'Transfering data' ? 'Sending...' : `${userName}:`}
+            placeholder={appStatus === 'Transfering data' ? t('sending') : `${userName}:`}
             inputProps={{ 'aria-label': 'Enter message here' }}
           />
 

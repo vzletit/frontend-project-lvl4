@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, useRef, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
@@ -10,9 +11,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { APIContext } from '../context/context';
-import { setHideModal } from '../store/generalSlice';
+import { setHideModal, setStatusBUSY } from '../store/generalSlice';
 
 export default function ModalRenameChannel({ visible }) {
+  const { t } = useTranslation();
   const socketAPI = useContext(APIContext);
 
   const channels = useSelector((state) => state.data.channels);
@@ -38,10 +40,10 @@ export default function ModalRenameChannel({ visible }) {
   const validate = Yup.object().shape({
     channelName: Yup
       .string()
-      .required()
+      .required(t('ErrorRequired'))
       .test(
         'existsCheck',
-        'Channel already exists',
+        t('ErrorChannelExists'),
         (value = '') => !channelNamesLowerCaseArr.includes(value.toLowerCase()),
       ),
 
@@ -53,6 +55,7 @@ export default function ModalRenameChannel({ visible }) {
 
   const handleRenameChannel = ({ channelName }, { resetForm }) => {
     resetForm();
+    dispatch(setStatusBUSY());
     socketAPI.renameChannel({ name: channelName, id });
     dispatch(setHideModal());
   };
@@ -69,7 +72,7 @@ export default function ModalRenameChannel({ visible }) {
         <Dialog open={visible} onClose={handleClose}>
           <Form onSubmit={formik.handleSubmit}>
 
-            <DialogTitle>Rename channel</DialogTitle>
+            <DialogTitle>{t('renameChannelTitle')}</DialogTitle>
             <DialogContent>
 
               <TextField
@@ -89,8 +92,8 @@ export default function ModalRenameChannel({ visible }) {
 
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit">Rename</Button>
+              <Button onClick={handleClose}>{t('cancel')}</Button>
+              <Button type="submit">{t('renameChannelSubmit')}</Button>
             </DialogActions>
           </Form>
 

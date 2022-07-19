@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -14,6 +15,7 @@ import { setStatusOK } from '../store/generalSlice';
 
 export default function MainPage() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const fetchingData = useSelector((state) => state.data.fetchingData);
 
@@ -38,7 +40,7 @@ export default function MainPage() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Item>
-                <Typography>Channels</Typography>
+                <Typography>{t('channels')}</Typography>
               </Item>
             </Grid>
             <Grid item xs={12}>
@@ -53,7 +55,7 @@ export default function MainPage() {
         <Grid item xs={10}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Item><Typography>Messages</Typography></Item>
+              <Item><Typography>{t('messages')}</Typography></Item>
             </Grid>
 
             <Grid item xs={12}>

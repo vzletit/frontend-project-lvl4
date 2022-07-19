@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,6 +12,8 @@ import ModalRenameChannel from './ModalRenameChannel';
 import { setShowModal } from '../store/generalSlice';
 
 export default function ChannelOptions(props) {
+  const { t } = useTranslation();
+
   const showModal = useSelector((state) => state.general.showModal);
   const dispatch = useDispatch();
 
@@ -50,10 +53,10 @@ export default function ChannelOptions(props) {
             onClose={handleClose}
           >
             <MenuItem key="rename" onClick={handleRename(props)}>
-              Rename
+              {t('renameChannelMenu')}
             </MenuItem>
             <MenuItem key="delete" onClick={handleRemove(props)}>
-              Delete
+              {t('removeChannelMenu')}
             </MenuItem>
           </Menu>
         </ClickAwayListener>

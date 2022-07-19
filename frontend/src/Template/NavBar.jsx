@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,6 +12,7 @@ import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/context';
 
 export default function navBar() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext); // eslint-disable-line 
 
@@ -50,7 +53,7 @@ export default function navBar() {
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 onClick={handleLogout}
               >
-                Logout
+                {t('navBar.logout')}
               </Button>
             )
               : (
@@ -59,13 +62,13 @@ export default function navBar() {
                     sx={{ my: 2, color: 'white', display: 'inline-block' }}
                     onClick={() => navigate('/login')}
                   >
-                    LogIn
+                    {t('navBar.login')}
                   </Button>
                   <Button
                     sx={{ my: 2, color: 'white', display: 'inline-block' }}
                     onClick={() => navigate('/signup')}
                   >
-                    SignUp
+                    {t('navBar.signup')}
                   </Button>
                 </>
               )}

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,9 +9,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch, useSelector } from 'react-redux';
 import { APIContext } from '../context/context';
-import { setHideModal } from '../store/generalSlice';
+import { setHideModal, setStatusBUSY } from '../store/generalSlice';
 
 export default function ModalRemoveChannel({ visible }) {
+  const { t } = useTranslation();
   const socketAPI = useContext(APIContext);
 
   const dispatch = useDispatch();
@@ -21,6 +23,7 @@ export default function ModalRemoveChannel({ visible }) {
   };
 
   const handleRemoveChannel = () => {
+    dispatch(setStatusBUSY());
     socketAPI.removeChannel(id);
     dispatch(setHideModal());
   };
@@ -29,18 +32,17 @@ export default function ModalRemoveChannel({ visible }) {
 
     <Dialog open={visible} onClose={handleClose}>
 
-      <DialogTitle>Delete channel</DialogTitle>
+      <DialogTitle>{t('removeChannelTitle')}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure to delete channel
-          {' '}
+          {t('removeChannelDescr')}
           <b>{name}</b>
           ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleRemoveChannel}>Delete</Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
+        <Button onClick={handleRemoveChannel}>{t('remomeChannelSubmit')}</Button>
       </DialogActions>
     </Dialog>
 

@@ -2,6 +2,7 @@ import React, {
   useEffect, useRef, useState, useContext,
 } from 'react';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -14,6 +15,7 @@ import AuthService from '../services/AuthService';
 import { AuthContext } from '../context/context';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { setIsAuthenticated } = useContext(AuthContext); // eslint-disable-line 
   const inputRef = useRef();
   const navigate = useNavigate();
@@ -24,8 +26,8 @@ export default function LoginPage() {
   const [isLoggingIn, setLoggingIn] = useState(false);
 
   const validate = Yup.object().shape({
-    username: Yup.string().min(3, 'Too short').max(20, 'Too long').required(),
-    password: Yup.string().min(3, 'Too short').max(20, 'Too long').required(),
+    username: Yup.string().min(3, t('ErrorUsernameLength')).max(20, t('ErrorUsernameLength')).required(t('ErrorRequired')),
+    password: Yup.string().min(3, t('ErrorPasswordLength')).max(20, t('ErrorPasswordLength')).required(t('ErrorRequired')),
   });
 
   const handleLogin = async ({ username, password }) => {
@@ -39,7 +41,7 @@ export default function LoginPage() {
 
       navigate('/');
     } catch (err) {
-      console.log('Login failed pochemu-to: ', err);
+      setLoggingIn(false);
       setAuthFailed(true);
     }
   };
@@ -50,7 +52,6 @@ export default function LoginPage() {
       initialValues={{ username: '', password: '' }}
       validationSchema={validate}
       onSubmit={handleLogin}
-
     >
       {(formik) => (
 
@@ -67,12 +68,12 @@ export default function LoginPage() {
               display: 'flex', flexWrap: 'wrap', maxWidth: 600,
             }}
             >
-              <h1>Login</h1>
+              <h1>{t('loginPageTitle')}</h1>
 
               <TextField
                 id="username"
                 inputRef={inputRef}
-                label="Username"
+                label={t('username')}
                 variant="outlined"
                 onChange={formik.handleChange}
                 type="text"
@@ -86,7 +87,7 @@ export default function LoginPage() {
               />
               <TextField
                 id="password"
-                label="Password"
+                label={t('password')}
                 variant="outlined"
                 onChange={formik.handleChange}
                 type="password"
@@ -99,7 +100,7 @@ export default function LoginPage() {
                 value={formik.values.password}
               />
 
-              {isAuthFailed ? <div className="invalid-feedback d-block">Invalid Username or Password</div> : null}
+              {isAuthFailed ? <div className="invalid-feedback d-block">{t('ErrorWrongPassword')}</div> : null}
 
               <Button
                 disabled={isLoggingIn}
@@ -107,7 +108,7 @@ export default function LoginPage() {
                 type="submit"
                 variant="contained"
               >
-                {isLoggingIn ? 'Wait...' : 'SignUp'}
+                {isLoggingIn ? t('wait') : t('loginPageSubmit')}
               </Button>
             </Box>
           </Form>
