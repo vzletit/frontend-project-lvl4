@@ -1,14 +1,15 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { setUserName } from './store/generalSlice';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './components/MainPage';
 import LoginPage from './components/LoginPage';
 import NotFoundPage from './components/NotFoundPage';
-import LogoutPage from './components/LogoutPage';
-import Context from './context/context';
+import { AuthContext } from './context/context';
+import RegistrationPage from './components/RegistrationPage';
+import NavBar from './Template/NavBar';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,29 +23,16 @@ function App() {
 
   return (
 
-    <Context.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      <NavBar />
+      <Routes>
+        <Route exact path="/" element={isAuthenticated ? <MainPage /> : <LoginPage />} />
+        <Route exact path="/login" element={<LoginPage />} />
+        <Route exact path="/signup" element={<RegistrationPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
 
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
-        </ul>
-        <hr />
-        <Routes>
-          <Route exact path="/" element={isAuthenticated ? <MainPage /> : <LoginPage />} />
-          <Route exact path="/login" element={<LoginPage />} />
-          <Route exact path="/logout" element={<LogoutPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </div>
-    </Context.Provider>
+    </AuthContext.Provider>
 
   );
 }

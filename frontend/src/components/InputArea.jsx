@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import InputBase from '@mui/material/InputBase';
@@ -6,12 +6,13 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import socketAPI from '../http/socket';
+import { APIContext } from '../context/context';
 import {
   setStatusCONNECTING,
 } from '../store/generalSlice';
 
 export default function InputArea() {
+  const socketAPI = useContext(APIContext);
   const isInputBlocked = useSelector((state) => state.general.blockedInput);
   const appStatus = useSelector((state) => state.general.status);
   const userName = useSelector((state) => state.general.userName);

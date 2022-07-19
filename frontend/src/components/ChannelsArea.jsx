@@ -26,15 +26,16 @@ export default function ChannelsArea() {
     <List component="nav" aria-label="main mailbox folders">
 
       { channels.map((channel) => (
-        <Box sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-        }}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+          }}
+          key={channel.id}
         >
           <ListItemButton
             sx={{ display: 'flex', flexGrow: 1 }}
-            key={channel.id}
             selected={currentChannelId === channel.id}
             onClick={() => handleChannelClick(channel.id)}
           >

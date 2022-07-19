@@ -5,11 +5,11 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import { fetchData } from '../store/dataSlice';
 import MessagesArea from './MessagesArea';
 import ChannelsArea from './ChannelsArea';
 import InputArea from './InputArea';
-import Item from '../style/Item';
 import { setStatusOK } from '../store/generalSlice';
 
 export default function MainPage() {
@@ -22,61 +22,56 @@ export default function MainPage() {
     dispatch(setStatusOK());
   }, []);
 
-  const defaultBox = {
-    m: 1,
-    p: 1,
-    bgcolor: '#555',
-    color: 'grey.800',
-    border: '1px solid',
-    borderColor: 'grey.300',
-    borderRadius: 2,
-  };
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }));
 
   return (
-    <>
-      <h2>Чядъ</h2>
-      <Box xs={{ ...defaultBox }}>
-        <Paper style={{ maxHeight: 500, overflow: 'auto' }} />
-        <Grid container spacing={1} columns={{ xs: 1, md: 12 }}>
-          <Grid item xs={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Item>
-                  <Typography>Channels</Typography>
-                </Item>
-              </Grid>
-              <Grid item xs={12}>
-                <Item>
-                  {fetchingData ? <CircularProgress /> : <ChannelsArea />}
-                </Item>
-              </Grid>
-
+    <Box sx={{ padding: '30px' }}>
+      <Paper style={{ maxHeight: 500, overflow: 'auto' }} />
+      <Grid container spacing={1} columns={{ xs: 1, md: 12 }}>
+        <Grid item xs={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Item>
+                <Typography>Channels</Typography>
+              </Item>
             </Grid>
+            <Grid item xs={12}>
+              <Item>
+                {fetchingData ? <CircularProgress /> : <ChannelsArea />}
+              </Item>
+            </Grid>
+
           </Grid>
+        </Grid>
 
-          <Grid item xs={10}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Item><Typography>Messages</Typography></Item>
-              </Grid>
+        <Grid item xs={10}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Item><Typography>Messages</Typography></Item>
+            </Grid>
 
-              <Grid item xs={12}>
-                <Item style={{ height: 450, overflow: 'auto' }}>
+            <Grid item xs={12}>
+              <Item style={{ height: 450, overflow: 'auto' }}>
 
-                  {fetchingData ? <CircularProgress /> : <MessagesArea />}
+                {fetchingData ? <CircularProgress /> : <MessagesArea />}
 
-                </Item>
-              </Grid>
+              </Item>
+            </Grid>
 
-              <Grid item xs={12}>
-                <Item sx={{ p: '2px 4px', display: 'flex', alignItems: 'left' }}>
-                  <InputArea />
-                </Item>
-              </Grid>
+            <Grid item xs={12}>
+              <Item sx={{ p: '2px 4px', display: 'flex', alignItems: 'left' }}>
+                <InputArea />
+              </Item>
             </Grid>
           </Grid>
         </Grid>
-      </Box>
-    </>
+      </Grid>
+    </Box>
   );
 }

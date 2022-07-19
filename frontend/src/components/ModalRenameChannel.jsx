@@ -1,20 +1,20 @@
 // @ts-nocheck
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import { useDispatch, useSelector } from 'react-redux';
-import socketAPI from '../http/socket';
+import { APIContext } from '../context/context';
 import { setHideModal } from '../store/generalSlice';
 
 export default function ModalRenameChannel({ visible }) {
+  const socketAPI = useContext(APIContext);
+
   const channels = useSelector((state) => state.data.channels);
   const { name, id } = useSelector((state) => state.general.showModal.extra);
 

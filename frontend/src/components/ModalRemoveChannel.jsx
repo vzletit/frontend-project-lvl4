@@ -1,18 +1,18 @@
 // @ts-nocheck
-import React from 'react';
-
+import React, { useContext } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import { useDispatch, useSelector } from 'react-redux';
-import socketAPI from '../http/socket';
+import { APIContext } from '../context/context';
 import { setHideModal } from '../store/generalSlice';
 
 export default function ModalRemoveChannel({ visible }) {
+  const socketAPI = useContext(APIContext);
+
   const dispatch = useDispatch();
   const { name, id } = useSelector((state) => state.general.showModal.extra);
 
