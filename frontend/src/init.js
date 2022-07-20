@@ -2,11 +2,14 @@
 /* eslint-disable react/jsx-filename-extension */
 
 import React from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Provider } from 'react-redux';
 import io from 'socket.io-client';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import i18next from 'i18next';
+import leoProfanity from 'leo-profanity';
 import { I18nextProvider } from 'react-i18next';
 import { APIContext } from './context/context';
 import ru from './lang/ru';
@@ -20,6 +23,8 @@ import dataSlice, {
 import generalSlice, {
   setStatusERROR,
   setStatusOK,
+  setStatusSUCCESS,
+
 } from './store/generalSlice';
 import App from './App';
 
@@ -32,6 +37,9 @@ export default async function init() {
     },
   });
 
+  const ruDict = leoProfanity.getDictionary('ru');
+  leoProfanity.add(ruDict);
+
   const store = configureStore({
     reducer: {
       data: dataSlice,
@@ -41,19 +49,23 @@ export default async function init() {
 
   const socket = io();
 
-  const acknowledge = (err, reply) => {
+  const toastApiAcknowledge = (toastMsgs) => (err, reply) => {
     if (err) {
-      console.log(err);
-      store.dispatch(setStatusERROR('Network problem'));
+      store.dispatch(setStatusERROR(toastMsgs.err));
+      toast.error(toastMsgs.err);
     }
-    if (reply) { store.dispatch(setStatusOK()); }
+    if (reply) {
+      store.dispatch(setStatusSUCCESS(toastMsgs.success));
+      toast.success(toastMsgs.success);
+    }
+    store.dispatch(setStatusOK());
   };
 
   const socketAPI = {
-    addMessage: (msg) => socket.volatile.timeout(3000).emit('newMessage', msg, acknowledge),
-    newChannel: (name) => socket.volatile.timeout(3000).emit('newChannel', name, acknowledge),
-    renameChannel: (args) => socket.volatile.timeout(3000).emit('renameChannel', args, acknowledge),
-    removeChannel: (id) => socket.volatile.timeout(3000).emit('removeChannel', { id }, acknowledge),
+    addMessage: (msg, toastMsgs) => socket.volatile.timeout(3000).emit('newMessage', msg, toastApiAcknowledge(toastMsgs)),
+    newChannel: (name, toastMsgs) => socket.volatile.timeout(3000).emit('newChannel', name, toastApiAcknowledge(toastMsgs)),
+    renameChannel: (args, toastMsgs) => socket.volatile.timeout(3000).emit('renameChannel', args, toastApiAcknowledge(toastMsgs)),
+    removeChannel: (id, toastMsgs) => socket.volatile.timeout(3000).emit('removeChannel', { id }, toastApiAcknowledge(toastMsgs)),
   };
 
   socket.on('newMessage', (payload) => {
@@ -63,6 +75,7 @@ export default async function init() {
   socket.on('newChannel', (payload) => {
     store.dispatch(addChannel(payload));
     store.dispatch(setActiveChannel(payload.id));
+    store.dispatch(setStatusOK());
   });
   socket.on('renameChannel', (payload) => {
     store.dispatch(renameChannel(payload));

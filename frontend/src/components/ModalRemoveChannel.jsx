@@ -24,7 +24,7 @@ export default function ModalRemoveChannel({ visible }) {
 
   const handleRemoveChannel = () => {
     dispatch(setStatusBUSY());
-    socketAPI.removeChannel(id);
+    socketAPI.removeChannel(id, { err: t('ErrorNetwork'), success: t('removeChannelSuccess') });
     dispatch(setHideModal());
   };
 
@@ -42,7 +42,7 @@ export default function ModalRemoveChannel({ visible }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>{t('cancel')}</Button>
-        <Button onClick={handleRemoveChannel}>{t('remomeChannelSubmit')}</Button>
+        <Button onClick={handleRemoveChannel}>{t('removeChannelSubmit')}</Button>
       </DialogActions>
     </Dialog>
 

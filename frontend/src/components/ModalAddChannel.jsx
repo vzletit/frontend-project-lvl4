@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useContext, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
@@ -17,11 +18,9 @@ import { setHideModal, setStatusBUSY } from '../store/generalSlice';
 export default function ModalAddChannel({ visible }) {
   const { t } = useTranslation();
   const socketAPI = useContext(APIContext);
-
   const channels = useSelector((state) => state.data.channels);
 
   const dispatch = useDispatch();
-
   const inputRef = useRef();
 
   useEffect(() => {
@@ -53,11 +52,10 @@ export default function ModalAddChannel({ visible }) {
     dispatch(setHideModal());
   };
 
-  const handleAddChannel = ({ channelName }, { resetForm }) => {
+  const handleAddChannel = async ({ channelName }, { resetForm }) => {
     dispatch(setStatusBUSY());
     resetForm();
-    socketAPI.newChannel({ name: channelName });
-
+    await socketAPI.newChannel({ name: leoProfanity.clean(channelName) }, { err: t('ErrorNetwork'), success: t('addChannelSuccess') });
     dispatch(setHideModal());
   };
 

@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import React, { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import { setUserName } from './store/generalSlice';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './components/MainPage';
 import LoginPage from './components/LoginPage';
 import NotFoundPage from './components/NotFoundPage';
@@ -14,7 +14,6 @@ import NavBar from './Template/NavBar';
 function App() {
   const dispatch = useDispatch();
   const userNameFromState = useSelector((state) => state.general.userName);
-
   const user = JSON.parse(localStorage.getItem('user'));
 
   const [isAuthenticated, setIsAuthenticated] = useState(!!user);
@@ -24,6 +23,7 @@ function App() {
   return (
 
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+
       <NavBar />
       <Routes>
         <Route exact path="/" element={isAuthenticated ? <MainPage /> : <LoginPage />} />
@@ -31,7 +31,7 @@ function App() {
         <Route exact path="/signup" element={<RegistrationPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-
+      <ToastContainer autoClose={2000} />
     </AuthContext.Provider>
 
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 import { useDispatch, useSelector } from 'react-redux';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import InputBase from '@mui/material/InputBase';
@@ -44,13 +45,14 @@ export default function InputArea() {
 
     const newMessage = {
       channelId: currentChannelId,
-      body: message,
+      body: leoProfanity.clean(message),
       username: userName,
     };
 
-    socketAPI.addMessage(newMessage);
+    socketAPI.addMessage(newMessage, { err: t('ErrorNetwork') });
     resetForm();
   };
+  console.log(isInputBlocked);
 
   return (
 

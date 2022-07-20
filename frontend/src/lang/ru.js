@@ -19,15 +19,18 @@ export default {
     addChannelTitle: 'Создать канал',
     addChannelDescr: 'Название нового канала (должно быть уникальным):',
     addChannelSubmit: 'Создать',
+    addChannelSuccess: 'Канал создан',
 
     renameChannelMenu: 'Переименовать',
     renameChannelTitle: 'Переименовать канал',
     renameChannelSubmit: 'Переименовать',
+    renameChannelSuccess: 'Канал переименован',
 
     removeChannelMenu: 'Удалить',
     removeChannelTitle: 'Удалить канал',
     removeChannelDescr: 'Вы увеврены, что хотите удалить канал ',
-    remomeChannelSubmit: 'Удалить',
+    removeChannelSubmit: 'Удалить',
+    removeChannelSuccess: 'Канал удалён',
 
     signUpPageTitle: 'Новый пользователь',
     signUpPageSubmit: 'Зарегистрироваться',
@@ -36,6 +39,7 @@ export default {
     loginPageSubmit: 'Войти',
 
     ErrorChannelExists: 'Такой канал уже есть.',
+    ErrorNetwork: 'Ошибка сети',
     ErrorUserExists: 'Это имя уже занято.',
     ErrorPasswordsNotSame: 'Пароли не совпадают',
     ErrorRequired: 'Это поле нужно заполнить',

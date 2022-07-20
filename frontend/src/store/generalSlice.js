@@ -3,8 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   status: 'Initial Fetching',
-  error: '',
-  blockedInput: true,
+  spinner: true,
+  errorMsg: '',
+  successMsg: '',
+  blockedInput: false,
   messageText: '',
   userName: null,
   showModal: { type: null, extra: { name: null, id: null } },
@@ -16,23 +18,32 @@ const generalSlice = createSlice({
   reducers: {
 
     setStatusOK: (state) => {
+      state.spinner = false;
       state.status = 'OK';
-      state.messageText = '';
-      state.error = '';
+      state.successMsg = '';
+      state.errorMsg = '';
+      state.showModal = { type: null, extra: { name: null, id: null } };
       state.blockedInput = false;
     },
 
     setStatusBUSY: (state) => {
       state.status = 'Busy';
       state.messageText = '';
-      state.error = '';
+      state.errorMsg = '';
       state.blockedInput = true;
     },
 
     setStatusERROR: (state, action) => {
       state.status = 'Error';
       state.messageText = '';
-      state.error = action.payload;
+      state.errorMsg = action.payload;
+      state.blockedInput = false;
+    },
+
+    setStatusSUCCESS: (state, action) => {
+      state.status = 'Success';
+      state.errorMsg = '';
+      state.successMsg = action.payload;
       state.blockedInput = false;
     },
 
@@ -51,7 +62,7 @@ const generalSlice = createSlice({
 });
 
 export const {
-  setStatusOK, setStatusERROR, setStatusBUSY, setMessageText,
+  setStatusOK, setStatusERROR, setStatusBUSY, setMessageText, setStatusSUCCESS,
 
   setBlockedInput,
   setUserName,

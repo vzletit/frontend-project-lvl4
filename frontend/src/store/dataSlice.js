@@ -1,26 +1,22 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import DataService from '../services/DataService';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   channels: [],
   messages: [],
   currentChannelId: null,
-  fetchingData: false,
 };
-
-export const fetchData = createAsyncThunk(
-  'data/initialFetchData',
-  async () => {
-    const response = await DataService.getData();
-    return response;
-  },
-);
 
 const dataSlice = createSlice({
   name: 'data',
   initialState,
   reducers: {
+
+    initialSetData: (state, action) => {
+      state.channels = action.payload.channels;
+      state.messages = action.payload.messages;
+    },
+
     setActiveChannel: (state, action) => { state.currentChannelId = action.payload; },
 
     addChannel: (state, action) => { state.channels.push(action.payload); },
@@ -44,27 +40,9 @@ const dataSlice = createSlice({
     addMessage: (state, action) => { state.messages.push(action.payload); },
   },
 
-  extraReducers: {
-    [fetchData.pending]: (state) => {
-      state.fetchingData = true;
-    },
-
-    [fetchData.fulfilled]: (state, action) => {
-      state.channels = action.payload.channels;
-      state.messages = action.payload.messages;
-      state.currentChannelId = action.payload.currentChannelId;
-      state.fetchingData = false;
-    },
-
-    [fetchData.rejected]: (state) => {
-      state.error = 'failed to get data from server';
-      state.status = 'Error';
-      state.fetchingData = false;
-    },
-  },
 });
 
 export const {
-  setActiveChannel, addMessage, addChannel, removeChannel, renameChannel,
+  setActiveChannel, addMessage, addChannel, removeChannel, renameChannel, initialSetData,
 } = dataSlice.actions;
 export default dataSlice.reducer;

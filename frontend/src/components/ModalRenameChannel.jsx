@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
@@ -56,7 +57,7 @@ export default function ModalRenameChannel({ visible }) {
   const handleRenameChannel = ({ channelName }, { resetForm }) => {
     resetForm();
     dispatch(setStatusBUSY());
-    socketAPI.renameChannel({ name: channelName, id });
+    socketAPI.renameChannel({ name: leoProfanity.clean(channelName), id }, { err: t('ErrorNetwork'), success: t('renameChannelSuccess') });
     dispatch(setHideModal());
   };
 
