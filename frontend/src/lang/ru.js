@@ -1,29 +1,27 @@
 export default {
   translation: {
     wait: 'Подождите...',
-    cancel: 'Отмена',
-    username: 'Имя',
+    cancel: 'Отменить',
+    username: 'Ваши ник',
+    usernameReg: 'Имя пользователя',
     password: 'Пароль',
-    passwordConfirm: 'Пароль ещё раз',
+    passwordConfirm: 'Подтвердите пароль',
     sending: 'Отправляем...',
 
     navBar: {
       login: 'Войти',
-      signup: 'Зарегистрироваться',
+      signup: 'Регистрация',
       logout: 'Выйти',
     },
 
-    channels: 'Каналы',
-    messages: 'Сообщения',
-
     addChannelTitle: 'Создать канал',
     addChannelDescr: 'Название нового канала (должно быть уникальным):',
-    addChannelSubmit: 'Создать',
+    addChannelSubmit: 'Отправить',
     addChannelSuccess: 'Канал создан',
 
     renameChannelMenu: 'Переименовать',
     renameChannelTitle: 'Переименовать канал',
-    renameChannelSubmit: 'Переименовать',
+    renameChannelSubmit: 'Отправить',
     renameChannelSuccess: 'Канал переименован',
 
     removeChannelMenu: 'Удалить',
@@ -32,19 +30,19 @@ export default {
     removeChannelSubmit: 'Удалить',
     removeChannelSuccess: 'Канал удалён',
 
-    signUpPageTitle: 'Новый пользователь',
+    signUpPageTitle: 'Регистрация',
     signUpPageSubmit: 'Зарегистрироваться',
 
     loginPageTitle: 'Войти',
     loginPageSubmit: 'Войти',
 
     ErrorChannelExists: 'Такой канал уже есть.',
-    ErrorNetwork: 'Ошибка сети',
+    ErrorNetwork: 'Ошибка соединения',
     ErrorUserExists: 'Это имя уже занято.',
-    ErrorPasswordsNotSame: 'Пароли не совпадают',
+    ErrorPasswordsNotSame: 'Пароли должны совпадать',
     ErrorRequired: 'Это поле нужно заполнить',
-    ErrorUsernameLength: 'Имя пользователя от 3 до 20 символов',
-    ErrorPasswordLength: 'Пароль от 6 до 20 символов',
-    ErrorWrongPassword: 'Неверный логин или пароль',
+    ErrorUsernameLength: 'От 3 до 20 символов',
+    ErrorPasswordLength: 'Не менее 6 символов',
+    ErrorWrongPassword: 'Неверные имя пользователя или пароль',
   },
 };

@@ -28,6 +28,7 @@ export default function ModalRenameChannel({ visible }) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       inputRef?.current?.focus();
+      inputRef?.current?.select();
     }, 100);
 
     return () => {
@@ -86,9 +87,8 @@ export default function ModalRenameChannel({ visible }) {
                 onChange={formik.handleChange}
                 type="text"
                 fullWidth
-                value={formik.values.channelName}
+                value={formik.values.channelName || name}
                 variant="standard"
-                placeholder={name}
               />
 
             </DialogContent>

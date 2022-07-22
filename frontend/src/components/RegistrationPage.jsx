@@ -75,7 +75,7 @@ export default function RegistrationPage() {
               <TextField
                 id="username"
                 inputRef={inputRef}
-                label={t('username')}
+                label={t('usernameReg')}
                 variant="outlined"
                 onChange={formik.handleChange}
                 type="text"
