@@ -32,7 +32,7 @@ export default function InputArea() {
     return () => {
       clearTimeout(timeout);
     };
-  }, [messages, channels]);
+  }, [messages, channels, currentChannelId]);
 
   const dispatch = useDispatch();
 
@@ -52,7 +52,6 @@ export default function InputArea() {
     socketAPI.addMessage(newMessage, { err: t('ErrorNetwork') });
     resetForm();
   };
-  console.log(isInputBlocked);
 
   return (
 
@@ -79,11 +78,11 @@ export default function InputArea() {
             inputProps={{ 'aria-label': 'Enter message here' }}
           />
 
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <Divider orientation="vertical" />
           <IconButton
             color="primary"
             disabled={isInputBlocked}
-            sx={{ p: '10px' }}
+            sx={{ mr: '5px' }}
             aria-label="Send message"
             type="submit"
           >

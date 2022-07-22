@@ -24,7 +24,7 @@ export default function navBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
           <Typography
             variant="h5"
@@ -44,7 +44,6 @@ export default function navBar() {
           >
             HEXLET CHAT
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} />
 
           <Box sx={{ flexGrow: 0 }}>
 

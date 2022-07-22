@@ -9,7 +9,7 @@ const initialState = {
   blockedInput: false,
   messageText: '',
   userName: null,
-  showModal: { type: null, extra: { name: null, id: null } },
+  showModal: '',
 };
 
 const generalSlice = createSlice({

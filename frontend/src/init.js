@@ -31,7 +31,7 @@ import App from './App';
 export default async function init() {
   await i18next.init({
     lng: 'ru',
-    debug: true,
+    debug: false,
     resources: {
       ru,
     },

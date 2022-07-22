@@ -61,7 +61,7 @@ export default function LoginPage() {
           direction="column"
           alignItems="center"
           justifyContent="center"
-          style={{ minHeight: '100vh' }}
+          style={{ minHeight: '70vh' }}
         >
           <Form>
             <Box sx={{

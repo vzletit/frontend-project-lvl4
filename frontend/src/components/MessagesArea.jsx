@@ -3,13 +3,15 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-
+// import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 
 export default function Messages() {
   const messages = useSelector((state) => state.data.messages);
-
+  const channels = useSelector((state) => state.data.channels);
   const currentChannelId = useSelector((state) => state.data.currentChannelId);
+
+  const currentChannelName = channels.filter((channel) => channel.id === currentChannelId)[0].name;
 
   const messagesEndRef = useRef();
   const scrollToBottom = () => {
@@ -22,7 +24,11 @@ export default function Messages() {
 
   return (
     <>
-      <List dense component="span">
+      <Typography variant="h6">
+        {`# ${currentChannelName} (${messages.filter((message) => message.channelId === currentChannelId).length})`}
+      </Typography>
+      <hr style={{ m: 0 }} />
+      <List dense component="span" sx={{ overflow: 'auto', height: 'calc(100vh - 229px)' }}>
         {messages.filter((message) => message.channelId === currentChannelId)
           .map((message) => (
             <ListItem
@@ -33,7 +39,7 @@ export default function Messages() {
                 disableTypography
                 primary={(
                   <>
-                    <Typography component="span" style={{ color: '#f00', fontSize: 14 }}>
+                    <Typography component="span" style={{ color: '#ff3355', fontSize: 14 }}>
                       {message.username}
                       {' '}
                     </Typography>
@@ -43,8 +49,9 @@ export default function Messages() {
               />
             </ListItem>
           ))}
+        <div ref={messagesEndRef} />
+
       </List>
-      <div ref={messagesEndRef} />
     </>
 
   );

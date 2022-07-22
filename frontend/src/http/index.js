@@ -10,4 +10,9 @@ $api.interceptors.request.use((config) => {
   return config;
 });
 
+// $api.interceptors.response.use(
+//   (response) => response.data,
+//   (error) => { if (error?.response?.status === 401) { console.log(error.response); } },
+// );
+
 export default $api;

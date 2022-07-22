@@ -1,20 +1,17 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import ClickAwayListener from '@mui/base/ClickAwayListener';
-import ModalRemoveChannel from './ModalRemoveChannel';
-import ModalRenameChannel from './ModalRenameChannel';
 import { setShowModal } from '../store/generalSlice';
 
 export default function ChannelOptions(props) {
   const { t } = useTranslation();
 
-  const showModal = useSelector((state) => state.general.showModal);
   const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,8 +58,6 @@ export default function ChannelOptions(props) {
           </Menu>
         </ClickAwayListener>
       ) : null}
-      <ModalRemoveChannel visible={showModal.type === 'removeChannel'} />
-      <ModalRenameChannel visible={showModal.type === 'renameChannel'} />
 
     </>
 
