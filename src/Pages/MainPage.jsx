@@ -50,8 +50,8 @@ export default function MainPage() {
             display: 'flex',
             backgroundColor: '#dedede',
             flexGrow: 0,
-            width: '250px',
-            flexBasis: '250px',
+            width: '150px',
+            flexBasis: '150px',
             flexDirection: 'column',
             justifyContent: 'space-between',
           }}
