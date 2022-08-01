@@ -2,7 +2,7 @@ export default {
   translation: {
     wait: 'Подождите...',
     cancel: 'Отменить',
-    username: 'Ваши ник',
+    username: 'Ваш ник',
     usernameReg: 'Имя пользователя',
     password: 'Пароль',
     passwordConfirm: 'Подтвердите пароль',
