@@ -56,13 +56,13 @@ export default function LoginPage() {
     >
       {(formik) => (
 
-        <Grid
-          container
-          spacing={0}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: '70vh' }}
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '20px',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
           <Form>
             <Box sx={{
@@ -128,7 +128,7 @@ export default function LoginPage() {
             </Box>
           </Form>
 
-        </Grid>
+        </Box>
       )}
 
     </Formik>

@@ -51,7 +51,7 @@ export default function MainPage() {
             backgroundColor: '#dedede',
             flexGrow: 0,
             width: '150px',
-            flexBasis: '150px',
+            flexBasis: '10%',
             flexDirection: 'column',
             justifyContent: 'space-between',
           }}
