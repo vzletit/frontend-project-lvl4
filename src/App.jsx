@@ -29,7 +29,7 @@ function App() {
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
       <ThemeProvider theme={theme}>
         <Box sx={{
-          display: 'flex', flexDirection: 'column', minHeight: '100vh',
+          display: 'flex', flexDirection: 'column', minHeight: '100vh', minWidth: '360px',
         }}
         >
           <Box sx={{ display: 'flex' }}>

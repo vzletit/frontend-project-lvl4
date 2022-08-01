@@ -58,6 +58,8 @@ export default function LoginPage() {
 
         <Box
           sx={{
+            width: '100%',
+            minWidth: '300px',
             display: 'flex',
             padding: '20px',
             justifyContent: 'center',
@@ -66,7 +68,7 @@ export default function LoginPage() {
         >
           <Form>
             <Box sx={{
-              display: 'flex', flexWrap: 'wrap', maxWidth: 600,
+              display: 'flex', flexWrap: 'wrap', maxWidth: 600
             }}
             >
               <h1>{t('loginPageTitle')}</h1>

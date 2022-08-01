@@ -59,6 +59,7 @@ export default function RegistrationPage() {
       {(formik) => (
         <Box
         sx={{
+          width: '100%',
           display: 'flex',
           padding: '20px',
           justifyContent: 'center',
